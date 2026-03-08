@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Okoro Anthony Martins | Web Developer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <style>
+    :root{
+      --black:  #0a0a0a;
+      --black2: #111111;
+      --black3: #1a1a1a;
+      --card:   #161616;
+      --blue:   #1a3cdb;
+      --blue2:  #1230b8;
+      --sky:    #4169e1;
+      --lt:     rgba(26,60,219,.12);
+      --lt2:    rgba(26,60,219,.06);
+      --white:  #ffffff;
+      --grey:   #a0a0a0;
+      --border: rgba(255,255,255,.08);
+      --nav-h:  70px;
+      --r:      14px;
+      --sh:     0 4px 30px rgba(26,60,219,.2);
+      --sh2:    0 12px 50px rgba(26,60,219,.3);
+      --tr:     .3s cubic-bezier(.4,0,.2,1);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:'Poppins',sans-serif;background:var(--black);color:var(--white);overflow-x:hidden}
+    a{color:inherit;text-decoration:none}
+    ul{list-style:none}
+    ::-webkit-scrollbar{width:5px}
+    ::-webkit-scrollbar-track{background:var(--black)}
+    ::-webkit-scrollbar-thumb{background:var(--blue);border-radius:3px}
+
+    /* NAV */
+    nav{
+      position:fixed;top:0;left:0;right:0;z-index:1000;
+      height:var(--nav-h);
+      display:flex;align-items:center;justify-content:space-between;
+      padding:0 6%;
+      background:rgba(10,10,10,.95);
+      backdrop-filter:blur(20px);
+      border-bottom:1px solid var(--border);
+      transition:box-shadow var(--tr);
+    }
+    nav.scrolled{box-shadow:0 4px 30px rgba(0,0,0,.5)}
+    .logo{
+      font-family:'Bebas Neue',cursive;
+      font-size:1.8rem;letter-spacing:2px;
+      background:linear-gradient(135deg,var(--white),var(--sky));
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+    }
+    .nav-links{display:flex;gap:2rem}
+    .nav-links a{
+      font-size:.82rem;font-weight:500;color:var(--grey);
+      padding:6px 14px;border-radius:50px;
+      transition:all var(--tr);letter-spacing:.5px;
+    }
+    .nav-links a:hover,.nav-links a.active{
+      color:var(--white);background:var(--lt);border:1px solid rgba(65,105,225,.3);
+    }
+    .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer}
+    .hamburger span{width:24px;height:2px;background:var(--white);border-radius:2px;transition:var(--tr)}
+    .hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+    .hamburger.open span:nth-child(2){opacity:0}
+    .hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+    .mob-menu{
+      display:none;position:fixed;top:var(--nav-h);left:0;right:0;
+      background:var(--black2);border-bottom:1px solid var(--border);
+      padding:1.5rem 6%;flex-direction:column;gap:1.2rem;
+      z-index:999;box-shadow:var(--sh);
+    }
+    .mob-menu a{font-size:.95rem;color:var(--grey);font-weight:500}
+    .mob-menu a:hover{color:var(--white)}
+
+    /* PAGES */
+    .page{display:none;padding-top:var(--nav-h);min-height:100vh}
+    .page.active{display:block}
+
+    /* SHARED */
+    .wrap{max-width:1100px;margin:0 auto;padding:5rem 6%}
+    .badge{
+      display:inline-flex;align-items:center;gap:.4rem;
+      font-size:.68rem;letter-spacing:3px;text-transform:uppercase;
+      color:var(--sky);font-weight:700;
+      background:var(--lt);padding:5px 16px;border-radius:50px;
+      margin-bottom:1rem;border:1px solid rgba(65,105,225,.25);
+    }
+    .h1{font-family:'Bebas Neue',cursive;font-size:clamp(2.5rem,6vw,4rem);line-height:1.05;margin-bottom:.5rem;letter-spacing:2px}
+    .h2{font-family:'Bebas Neue',cursive;font-size:clamp(1.8rem,4vw,2.8rem);line-height:1.1;margin-bottom:.5rem;letter-spacing:2px}
+    .rule{width:48px;height:3px;background:linear-gradient(90deg,var(--blue),var(--sky));border-radius:4px;margin:.8rem 0 2rem}
+    .sub{color:var(--grey);font-size:.92rem;line-height:1.85;max-width:560px;margin-bottom:2rem}
+    .btn{
+      display:inline-flex;align-items:center;gap:.5rem;
+      padding:.75rem 1.8rem;border-radius:50px;
+      font-size:.85rem;font-weight:600;cursor:pointer;
+      transition:all var(--tr);border:none;font-family:'Poppins',sans-serif;
+    }
+    .btn-primary{background:linear-gradient(135deg,var(--blue),var(--sky));color:#fff;box-shadow:0 4px 18px rgba(26,60,219,.35)}
+    .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(26,60,219,.5)}
+    .btn-ghost{background:transparent;color:var(--white);border:2px solid rgba(255,255,255,.2)}
+    .btn-ghost:hover{border-color:var(--sky);color:var(--sky);transform:translateY(-2px)}
+
+    /* HOME */
+    .hero{
+      min-height:calc(100vh - var(--nav-h));
+      display:flex;align-items:center;
+      padding:3rem 6%;position:relative;overflow:hidden;
+    }
+    .hero-bg{
+      position:absolute;inset:0;
+      background:radial-gradient(ellipse at 70% 50%, rgba(26,60,219,.12) 0%, transparent 60%),
+                 radial-gradient(ellipse at 10% 80%, rgba(65,105,225,.07) 0%, transparent 50%);
+      pointer-events:none;
+    }
+    .hero-grid-lines{
+      position:absolute;inset:0;
+      background-image:linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),
+                       linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);
+      background-size:60px 60px;
+      pointer-events:none;
+    }
+    .hero-inner{
+      display:grid;grid-template-columns:1.2fr .8fr;
+      gap:4rem;align-items:center;
+      width:100%;max-width:1100px;margin:0 auto;position:relative;z-index:1;
+    }
+    .hero-left{animation:slideUp .7s ease both}
+    .hero-tag{
+      display:inline-flex;align-items:center;gap:.5rem;
+      font-size:.7rem;letter-spacing:3px;text-transform:uppercase;
+      color:var(--sky);font-weight:700;
+      background:var(--lt);padding:5px 16px;border-radius:50px;
+      margin-bottom:1.4rem;border:1px solid rgba(65,105,225,.3);
+    }
+    .hero-name{
+      font-family:'Bebas Neue',cursive;
+      font-size:clamp(3rem,7vw,5.5rem);font-weight:400;line-height:1;
+      margin-bottom:.6rem;letter-spacing:3px;
+    }
+    .hero-name .blue{
+      background:linear-gradient(135deg,var(--sky),#7b9ff5);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+    }
+    .hero-sub{font-size:.95rem;color:var(--grey);margin-bottom:1.6rem;letter-spacing:.5px}
+    .hero-desc{font-size:.92rem;color:#c0c0c0;line-height:1.9;max-width:500px;margin-bottom:2.2rem}
+    .hero-btns{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:2.5rem}
+    .hero-counters{display:flex;gap:2.5rem}
+    .cnt-num{font-family:'Bebas Neue',cursive;font-size:2.2rem;color:var(--sky);letter-spacing:2px}
+    .cnt-lbl{font-size:.68rem;color:var(--grey);letter-spacing:1.5px;text-transform:uppercase}
+
+    /* Terminal Card */
+    .terminal{
+      background:var(--black2);border:1px solid var(--border);
+      border-radius:14px;overflow:hidden;
+      box-shadow:var(--sh2);animation:slideUp .9s ease .15s both;
+    }
+    .term-bar{
+      background:var(--black3);padding:12px 16px;
+      display:flex;align-items:center;gap:8px;
+      border-bottom:1px solid var(--border);
+    }
+    .dot{width:12px;height:12px;border-radius:50%}
+    .dot-r{background:#ff5f57}.dot-y{background:#febc2e}.dot-g{background:#28c840}
+    .term-title{font-size:.75rem;color:var(--grey);margin-left:auto;margin-right:auto;letter-spacing:1px}
+    .term-body{padding:1.5rem;font-family:'Courier New',monospace;font-size:.8rem;line-height:1.9}
+    .term-line{margin-bottom:3px}
+    .prompt{color:var(--sky)}
+    .cmd{color:#e2e8f0}
+    .out{color:#a0a0a0;padding-left:1.2rem}
+    .out.blue{color:#7b9ff5}
+    .out.green{color:#4ade80}
+    .out.yellow{color:#facc15}
+    .cursor{display:inline-block;width:8px;height:14px;background:var(--sky);animation:blink 1s step-end infinite;vertical-align:middle;margin-left:2px}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+    /* ABOUT */
+    .about-grid{display:grid;grid-template-columns:1fr 1.7fr;gap:4rem;align-items:start}
+    .about-visual{
+      border-radius:var(--r);overflow:hidden;
+      background:linear-gradient(145deg,var(--black2),var(--black3));
+      border:1px solid var(--border);
+      aspect-ratio:4/5;
+      display:flex;flex-direction:column;
+      align-items:center;justify-content:center;
+      gap:1rem;position:relative;
+    }
+    .av-ring{
+      width:110px;height:110px;border-radius:50%;
+      border:3px solid var(--blue);
+      display:flex;align-items:center;justify-content:center;
+      background:var(--lt);
+      box-shadow:0 0 30px rgba(26,60,219,.25);
+    }
+    .av-initials{font-family:'Bebas Neue',cursive;font-size:2.8rem;color:var(--sky);letter-spacing:3px}
+    .av-name{font-size:.75rem;color:var(--grey);letter-spacing:3px;text-transform:uppercase}
+    .av-badge{
+      position:absolute;bottom:16px;left:50%;transform:translateX(-50%);
+      background:var(--blue);
+      color:#fff;padding:.5rem 1.2rem;border-radius:50px;
+      font-size:.72rem;font-weight:600;white-space:nowrap;
+      box-shadow:var(--sh);
+    }
+    .about-text p{color:#b0b0b0;line-height:1.9;margin-bottom:1.1rem;font-size:.93rem}
+    .about-text strong{color:var(--white)}
+    .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;margin:1.8rem 0}
+    .ii{display:flex;flex-direction:column;gap:3px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px 12px}
+    .il{font-size:.62rem;color:var(--sky);letter-spacing:2px;text-transform:uppercase;font-weight:700}
+    .iv{font-size:.85rem;color:var(--white);font-weight:500}
+
+    /* Skills */
+    .skills-wrap{margin-top:4.5rem}
+    .skill-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:1.2rem}
+    .sc{
+      background:var(--card);border:1px solid var(--border);
+      border-radius:var(--r);padding:1.5rem;
+      transition:transform var(--tr),box-shadow var(--tr),border-color var(--tr);
+    }
+    .sc:hover{transform:translateY(-5px);box-shadow:var(--sh2);border-color:rgba(65,105,225,.4)}
+    .sc-icon{font-size:1.7rem;margin-bottom:.8rem}
+    .sc-name{font-weight:700;font-size:.85rem;margin-bottom:.7rem;color:var(--white)}
+    .tags{display:flex;flex-wrap:wrap;gap:.4rem}
+    .tg{font-size:.65rem;padding:3px 9px;border-radius:50px;background:var(--lt);color:var(--sky);border:1px solid rgba(65,105,225,.2);font-weight:600}
+    .bars{margin-top:3rem;max-width:580px}
+    .bars-h{font-family:'Bebas Neue',cursive;font-size:1.8rem;letter-spacing:2px;margin-bottom:1.5rem}
+    .bi{margin-bottom:1.4rem}
+    .bh{display:flex;justify-content:space-between;margin-bottom:.45rem}
+    .bn{font-size:.85rem;font-weight:600;color:var(--white)}
+    .bp{font-size:.78rem;color:var(--sky);font-weight:700}
+    .bg{height:9px;background:var(--black3);border-radius:50px;overflow:hidden;border:1px solid var(--border)}
+    .bf{height:100%;background:linear-gradient(90deg,var(--blue),var(--sky));border-radius:50px;width:0;transition:width 1.3s cubic-bezier(.4,0,.2,1)}
+
+    /* Tooltip */
+    .tooltip-box{position:absolute;background:var(--black3);color:var(--white);border:1px solid var(--border);font-size:.73rem;padding:6px 12px;border-radius:8px;pointer-events:none;z-index:9999;display:none;white-space:nowrap;box-shadow:var(--sh)}
+
+    /* PORTFOLIO */
+    .filter-row{display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:2.5rem}
+    .fb{
+      padding:.4rem 1.2rem;border-radius:50px;
+      border:1px solid var(--border);background:transparent;
+      color:var(--grey);font-size:.78rem;font-weight:600;
+      cursor:pointer;transition:all var(--tr);font-family:'Poppins',sans-serif;
+    }
+    .fb.active,.fb:hover{background:linear-gradient(135deg,var(--blue),var(--sky));color:#fff;border-color:transparent;box-shadow:var(--sh)}
+    .pg{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:1.8rem}
+    .pc{
+      background:var(--card);border:1px solid var(--border);
+      border-radius:var(--r);overflow:hidden;
+      transition:transform var(--tr),box-shadow var(--tr),border-color var(--tr);
+      display:flex;flex-direction:column;
+    }
+    .pc:hover{transform:translateY(-6px);box-shadow:var(--sh2);border-color:rgba(65,105,225,.35)}
+    .pt{height:190px;display:flex;align-items:center;justify-content:center;font-size:3rem;position:relative;overflow:hidden}
+    .pt1{background:linear-gradient(135deg,#0a1628,#1a3cdb)}
+    .pt2{background:linear-gradient(135deg,#0d0d1a,#1230b8)}
+    .pt3{background:linear-gradient(135deg,#0a0a1a,#2a3f9f)}
+    .po{position:absolute;inset:0;background:rgba(26,60,219,.15);opacity:0;transition:opacity var(--tr);display:flex;align-items:center;justify-content:center;gap:.8rem}
+    .pc:hover .po{opacity:1}
+    .ob{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--sky));color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;transition:transform var(--tr);font-size:.85rem}
+    .ob:hover{transform:scale(1.12)}
+    .pi{padding:1.4rem;flex:1;display:flex;flex-direction:column}
+    .ptype{font-size:.65rem;letter-spacing:2px;color:var(--sky);text-transform:uppercase;font-weight:700;margin-bottom:.4rem}
+    .pname{font-family:'Bebas Neue',cursive;font-size:1.3rem;letter-spacing:1px;margin-bottom:.5rem}
+    .pdesc{color:var(--grey);font-size:.82rem;line-height:1.75;flex:1;margin-bottom:1rem}
+    .pstack{display:flex;flex-wrap:wrap;gap:.4rem}
+
+    /* CONTACT */
+    .cg{display:grid;grid-template-columns:1fr 1.5fr;gap:4rem;align-items:start}
+    .cc-wrap{display:flex;flex-direction:column;gap:1rem}
+    .cc{
+      background:var(--card);border:1px solid var(--border);
+      border-radius:var(--r);padding:1.3rem;
+      display:flex;align-items:center;gap:1rem;
+      transition:transform var(--tr),border-color var(--tr),box-shadow var(--tr);
+    }
+    .cc:hover{transform:translateX(6px);border-color:rgba(65,105,225,.4);box-shadow:var(--sh)}
+    .ci{width:46px;height:46px;border-radius:13px;background:linear-gradient(135deg,var(--blue),var(--sky));display:flex;align-items:center;justify-content:center;font-size:1rem;color:#fff;flex-shrink:0;box-shadow:var(--sh)}
+    .cl{font-size:.65rem;color:var(--grey);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:2px;font-weight:600}
+    .cv{font-weight:600;font-size:.85rem;color:var(--white)}
+    .sr{display:flex;gap:.8rem;margin-top:1.8rem}
+    .sb{width:44px;height:44px;border-radius:50%;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.95rem;color:var(--grey);transition:all var(--tr);cursor:pointer}
+    .sb:hover{border-color:var(--sky);color:var(--sky);transform:translateY(-3px);box-shadow:var(--sh)}
+    .cf{display:flex;flex-direction:column;gap:1.1rem}
+    .fr{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem}
+    .fg{display:flex;flex-direction:column;gap:.45rem}
+    .fg label{font-size:.68rem;letter-spacing:1px;color:var(--grey);text-transform:uppercase;font-weight:600}
+    .fg input,.fg textarea,.fg select{
+      background:var(--black3);border:1px solid var(--border);
+      border-radius:10px;padding:.8rem 1rem;
+      color:var(--white);font-family:'Poppins',sans-serif;font-size:.88rem;
+      transition:border-color var(--tr),box-shadow var(--tr);
+      outline:none;resize:vertical;
+    }
+    .fg input:focus,.fg textarea:focus,.fg select:focus{border-color:var(--sky);box-shadow:0 0 0 3px rgba(65,105,225,.15)}
+    .fg textarea{min-height:130px}
+    .fg select option{background:var(--black2)}
+    .field-error{border-color:#ef4444 !important}
+    .err-msg{font-size:.72rem;color:#ef4444;display:none;margin-top:2px}
+    .fs{padding:.9rem 1.1rem;border-radius:10px;font-size:.84rem;display:none}
+    .fs.ok{background:rgba(74,222,128,.07);border:1px solid rgba(74,222,128,.25);color:#4ade80;display:block}
+    .fs.err{background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.2);color:#ef4444;display:block}
+
+    /* Back to top */
+    #backTop{position:fixed;bottom:28px;right:28px;width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--sky));color:#fff;border:none;cursor:pointer;font-size:1rem;display:none;align-items:center;justify-content:center;box-shadow:var(--sh2);z-index:800;transition:transform var(--tr)}
+    #backTop:hover{transform:translateY(-3px) scale(1.08)}
+
+    /* FOOTER */
+    footer{text-align:center;padding:2rem 6%;border-top:1px solid var(--border);color:var(--grey);font-size:.78rem;margin-top:2rem}
+    footer b{color:var(--sky)}
+
+    /* ANIMS */
+    @keyframes slideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+    .fi{opacity:0;transform:translateY(24px);transition:opacity .65s ease,transform .65s ease}
+    .fi.v{opacity:1;transform:translateY(0)}
+    .avail{display:inline-flex;align-items:center;gap:.5rem;font-size:.72rem;color:#4ade80;font-weight:600;background:rgba(74,222,128,.07);border:1px solid rgba(74,222,128,.2);padding:4px 12px;border-radius:50px;margin-top:1.2rem}
+    .avail::before{content:'';width:7px;height:7px;border-radius:50%;background:#4ade80;animation:pulse 2s infinite;flex-shrink:0}
+
+    /* RESPONSIVE */
+    @media(max-width:920px){.hero-inner{grid-template-columns:1fr}.terminal{display:none}.about-grid{grid-template-columns:1fr}.about-visual{aspect-ratio:1/1;max-width:280px;margin:0 auto}.cg{grid-template-columns:1fr}}
+    @media(max-width:768px){.nav-links{display:none}.hamburger{display:flex}.fr{grid-template-columns:1fr}.wrap{padding:3rem 5%}}
+    @media(max-width:480px){.pg{grid-template-columns:1fr}.skill-cards{grid-template-columns:1fr 1fr}.hero-counters{gap:1.5rem}}
+  </style>
+</head>
+<body>
+
+<div class="tooltip-box" id="tooltip"></div>
+<button id="backTop"><i class="fas fa-arrow-up"></i></button>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="logo">O. Anthony</div>
+  <ul class="nav-links">
+    <li><a href="#" class="active" data-page="home">Home</a></li>
+    <li><a href="#" data-page="about">About</a></li>
+    <li><a href="#" data-page="portfolio">Portfolio</a></li>
+    <li><a href="#" data-page="contact">Contact</a></li>
+  </ul>
+  <div class="hamburger" id="ham"><span></span><span></span><span></span></div>
+</nav>
+<div class="mob-menu" id="mob">
+  <a href="#" data-page="home">Home</a>
+  <a href="#" data-page="about">About</a>
+  <a href="#" data-page="portfolio">Portfolio</a>
+  <a href="#" data-page="contact">Contact</a>
+</div>
+
+<!-- ══════════ HOME ══════════ -->
+<div class="page active" id="page-home">
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid-lines"></div>
+    <div class="hero-inner">
+      <div class="hero-left">
+        <div class="hero-tag">⚡ Available for opportunities</div>
+        <h1 class="hero-name">
+          OKORO<br>
+          ANTHONY<br>
+          <span class="blue">MARTINS</span>
+        </h1>
+        <p class="hero-sub">Web Developer &nbsp;·&nbsp; IT Student &nbsp;·&nbsp; Tech Enthusiast</p>
+        <p class="hero-desc">
+          A passionate 200-level Information Technology student at FUTO, Owerri.
+          I build modern, responsive websites and have a deep interest in programming,
+          football, and staying ahead of the latest trends in technology.
+          I believe clean code is the foundation of great products.
+        </p>
+        <div class="hero-btns">
+          <button class="btn btn-primary" id="btnWork"><i class="fas fa-code"></i> View My Work</button>
+          <button class="btn btn-ghost" id="btnContact"><i class="fas fa-envelope"></i> Contact Me</button>
+        </div>
+        <div class="hero-counters">
+          <div><div class="cnt-num">200</div><div class="cnt-lbl">Level · FUTO</div></div>
+          <div><div class="cnt-num">IT</div><div class="cnt-lbl">Programme</div></div>
+          <div><div class="cnt-num">⚽</div><div class="cnt-lbl">Football Fan</div></div>
+        </div>
+      </div>
+
+      <!-- Terminal Card -->
+      <div>
+        <div class="terminal">
+          <div class="term-bar">
+            <div class="dot dot-r"></div>
+            <div class="dot dot-y"></div>
+            <div class="dot dot-g"></div>
+            <div class="term-title">portfolio.js</div>
+          </div>
+          <div class="term-body">
+            <div class="term-line"><span class="prompt">$ </span><span class="cmd">whoami</span></div>
+            <div class="term-line out blue">Okoro Anthony Martins</div>
+            <br>
+            <div class="term-line"><span class="prompt">$ </span><span class="cmd">cat profile.json</span></div>
+            <div class="term-line out">{</div>
+            <div class="term-line out">&nbsp; "role": <span class="green">"Web Developer"</span>,</div>
+            <div class="term-line out">&nbsp; "level": <span class="yellow">"200 Level · FUTO"</span>,</div>
+            <div class="term-line out">&nbsp; "location": <span class="green">"Oyigbo, Rivers State"</span>,</div>
+            <div class="term-line out">&nbsp; "stack": <span class="yellow">["HTML","CSS","JS","jQuery"]</span>,</div>
+            <div class="term-line out">&nbsp; "hobbies": <span class="green">["Football","Tech","Coding"]</span>,</div>
+            <div class="term-line out">&nbsp; "available": <span style="color:#4ade80">true</span></div>
+            <div class="term-line out">}</div>
+            <br>
+            <div class="term-line"><span class="prompt">$ </span><span class="cmd">status</span></div>
+            <div class="term-line out green">✔ Open to internships &amp; projects</div>
+            <br>
+            <div class="term-line"><span class="prompt">$ </span><span class="cursor"></span></div>
+          </div>
+        </div>
+        <div style="text-align:center">
+          <div class="avail">Open to internships &amp; collaborations</div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <footer><p>© 2026 <b>Okoro Anthony Martins</b>. All rights reserved.</p></footer>
+</div>
+
+<!-- ══════════ ABOUT ══════════ -->
+<div class="page" id="page-about">
+  <div class="wrap">
+    <span class="badge"><i class="fas fa-user"></i> &nbsp;Who I Am</span>
+    <h2 class="h1">About Me</h2>
+    <div class="rule"></div>
+
+    <div class="about-grid">
+      <div class="fi">
+        <div class="about-visual">
+          <div class="av-ring"><div class="av-initials">OAM</div></div>
+          <div class="av-name">Okoro Anthony Martins</div>
+          <div class="av-badge">🎓 FUTO · 200 Level · IT</div>
+        </div>
+      </div>
+
+      <div class="about-text fi">
+        <p>
+          My name is <strong>Okoro Anthony Martins</strong>, a focused and driven
+          200-level <strong>Information Technology</strong> student at the
+          <strong>Federal University of Technology, Owerri (FUTO)</strong>.
+          I have a strong passion for web development and consider myself a builder —
+          someone who takes ideas and turns them into real, functional digital experiences.
+        </p>
+        <p>
+          As a <strong>Web Developer</strong>, I am committed to writing clean, efficient,
+          and readable code. I enjoy building projects that are not only visually attractive
+          but also practical and user-friendly. My interest in <strong>programming</strong>
+          goes beyond the classroom — I spend time reading about new technologies and
+          exploring the rapidly evolving world of software development.
+        </p>
+        <p>
+          Outside of tech, I am a passionate <strong>football lover</strong>. The teamwork,
+          strategy, and discipline that football demands are qualities I bring into every
+          project I work on. I believe great developers, like great footballers, never stop
+          improving their craft.
+        </p>
+        <div class="info-grid">
+          <div class="ii"><span class="il">Full Name</span><span class="iv">Okoro Anthony Martins</span></div>
+          <div class="ii"><span class="il">Email</span><span class="iv">Toneromartino@gmail.com</span></div>
+          <div class="ii"><span class="il">University</span><span class="iv">FUTO, Owerri</span></div>
+          <div class="ii"><span class="il">Level / Course</span><span class="iv">200 Level · IT</span></div>
+          <div class="ii"><span class="il">Location</span><span class="iv">Oyigbo, Rivers State</span></div>
+          <div class="ii"><span class="il">Phone</span><span class="iv">09121657051</span></div>
+          <div class="ii"><span class="il">Hobbies</span><span class="iv">⚽ Football &nbsp;|&nbsp; 💻 Tech Reading</span></div>
+          <div class="ii"><span class="il">Available For</span><span class="iv">Internships &amp; Projects</span></div>
+        </div>
+        <div style="display:flex;gap:1rem;flex-wrap:wrap">
+          <button class="btn btn-primary" id="btnProjects"><i class="fas fa-briefcase"></i> My Projects</button>
+          <button class="btn btn-ghost" id="btnHire"><i class="fas fa-paper-plane"></i> Contact Me</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SKILLS -->
+    <div class="skills-wrap">
+      <span class="badge"><i class="fas fa-code"></i> &nbsp;Tech Stack</span>
+      <h3 class="h2">Skills &amp; Tools</h3>
+      <div class="rule"></div>
+      <div class="skill-cards">
+        <div class="sc fi" data-tip="Front-end core technologies"><div class="sc-icon">💻</div><div class="sc-name">Core Languages</div><div class="tags"><span class="tg">HTML5</span><span class="tg">CSS3</span><span class="tg">JavaScript</span></div></div>
+        <div class="sc fi" data-tip="Building responsive web interfaces"><div class="sc-icon">🌐</div><div class="sc-name">Web Development</div><div class="tags"><span class="tg">Responsive Design</span><span class="tg">DOM Manipulation</span><span class="tg">UI/UX</span></div></div>
+        <div class="sc fi" data-tip="JavaScript library for interactivity"><div class="sc-icon">⚡</div><div class="sc-name">Libraries</div><div class="tags"><span class="tg">jQuery</span><span class="tg">Bootstrap</span></div></div>
+        <div class="sc fi" data-tip="Layout and responsive design tools"><div class="sc-icon">📐</div><div class="sc-name">Layout</div><div class="tags"><span class="tg">Flexbox</span><span class="tg">CSS Grid</span><span class="tg">Media Queries</span></div></div>
+        <div class="sc fi" data-tip="Developer tools and version control"><div class="sc-icon">🛠️</div><div class="sc-name">Tools</div><div class="tags"><span class="tg">VS Code</span><span class="tg">Git</span><span class="tg">GitHub</span></div></div>
+        <div class="sc fi" data-tip="Currently expanding my skill set"><div class="sc-icon">📚</div><div class="sc-name">Learning</div><div class="tags"><span class="tg">React</span><span class="tg">Node.js</span><span class="tg">Python</span></div></div>
+      </div>
+
+      <div class="bars fi">
+        <p class="bars-h">Proficiency</p>
+        <div class="bi"><div class="bh"><span class="bn">HTML &amp; CSS</span><span class="bp">88%</span></div><div class="bg"><div class="bf" data-p="88"></div></div></div>
+        <div class="bi"><div class="bh"><span class="bn">JavaScript</span><span class="bp">75%</span></div><div class="bg"><div class="bf" data-p="75"></div></div></div>
+        <div class="bi"><div class="bh"><span class="bn">jQuery &amp; Bootstrap</span><span class="bp">78%</span></div><div class="bg"><div class="bf" data-p="78"></div></div></div>
+        <div class="bi"><div class="bh"><span class="bn">Web Development</span><span class="bp">82%</span></div><div class="bg"><div class="bf" data-p="82"></div></div></div>
+        <div class="bi"><div class="bh"><span class="bn">UI/UX Design</span><span class="bp">70%</span></div><div class="bg"><div class="bf" data-p="70"></div></div></div>
+      </div>
+    </div>
+  </div>
+  <footer><p>© 2026 <b>Okoro Anthony Martins</b>. All rights reserved.</p></footer>
+</div>
+
+<!-- ══════════ PORTFOLIO ══════════ -->
+<div class="page" id="page-portfolio">
+  <div class="wrap">
+    <span class="badge"><i class="fas fa-folder-open"></i> &nbsp;My Work</span>
+    <h2 class="h1">Portfolio</h2>
+    <div class="rule"></div>
+    <p class="sub">A showcase of projects I have built and designed. Every project is a step forward in my journey as a web developer.</p>
+    <div class="filter-row">
+      <button class="fb active" data-f="all">All</button>
+      <button class="fb" data-f="web">Web Dev</button>
+      <button class="fb" data-f="ui">UI/UX</button>
+      <button class="fb" data-f="js">JavaScript</button>
+    </div>
+    <div class="pg">
+      <div class="pc fi" data-c="web">
+        <div class="pt pt1">🌐<div class="po"><button class="ob" onclick="window.open('#')"><i class="fas fa-external-link-alt"></i></button><button class="ob" onclick="window.open('#')"><i class="fab fa-github"></i></button></div></div>
+        <div class="pi"><span class="ptype">Web Development &amp; Design</span><h3 class="pname">Personal Portfolio Website</h3><p class="pdesc">A fully responsive portfolio website built from scratch using HTML5, CSS3, JavaScript, and jQuery. Features a dark theme, terminal-style hero card, animated skill bars, project filtering, and form validation.</p><div class="pstack"><span class="tg">HTML5</span><span class="tg">CSS3</span><span class="tg">JavaScript</span><span class="tg">jQuery</span></div></div>
+      </div>
+      <div class="pc fi" data-c="js">
+        <div class="pt pt2">⚡<div class="po"><button class="ob" onclick="window.open('#')"><i class="fas fa-external-link-alt"></i></button><button class="ob" onclick="window.open('#')"><i class="fab fa-github"></i></button></div></div>
+        <div class="pi"><span class="ptype">JavaScript Project</span><h3 class="pname">Coming Soon</h3><p class="pdesc">An interactive JavaScript project is currently in development. Check back soon!</p><div class="pstack"><span class="tg">In Progress</span></div></div>
+      </div>
+      <div class="pc fi" data-c="ui">
+        <div class="pt pt3">🎨<div class="po"><button class="ob" onclick="window.open('#')"><i class="fas fa-external-link-alt"></i></button><button class="ob" onclick="window.open('#')"><i class="fab fa-github"></i></button></div></div>
+        <div class="pi"><span class="ptype">UI / UX Design</span><h3 class="pname">Coming Soon</h3><p class="pdesc">A UI/UX design project is on the way. Stay tuned for updates!</p><div class="pstack"><span class="tg">In Progress</span></div></div>
+      </div>
+    </div>
+  </div>
+  <footer><p>© 2026 <b>Okoro Anthony Martins</b>. All rights reserved.</p></footer>
+</div>
+
+<!-- ══════════ CONTACT ══════════ -->
+<div class="page" id="page-contact">
+  <div class="wrap">
+    <span class="badge"><i class="fas fa-paper-plane"></i> &nbsp;Get In Touch</span>
+    <h2 class="h1">Contact Me</h2>
+    <div class="rule"></div>
+    <p class="sub">Got a project idea, an opportunity, or just want to connect? Send me a message — I'm always open to a good conversation.</p>
+    <div class="cg">
+      <div class="fi">
+        <div class="cc-wrap">
+          <div class="cc"><div class="ci"><i class="fas fa-envelope"></i></div><div><div class="cl">Email</div><div class="cv">Toneromartino@gmail.com</div></div></div>
+          <div class="cc"><div class="ci"><i class="fas fa-phone"></i></div><div><div class="cl">Phone</div><div class="cv">09121657051</div></div></div>
+          <div class="cc"><div class="ci"><i class="fas fa-map-marker-alt"></i></div><div><div class="cl">Location</div><div class="cv">Oyigbo, Rivers State, Nigeria</div></div></div>
+          <div class="cc"><div class="ci"><i class="fas fa-graduation-cap"></i></div><div><div class="cl">University</div><div class="cv">FUTO, Owerri — 200 Level IT</div></div></div>
+        </div>
+        <div class="sr">
+          <a class="sb" href="mailto:Toneromartino@gmail.com" title="Email"><i class="fas fa-envelope"></i></a>
+          <a class="sb" href="#" title="GitHub"><i class="fab fa-github"></i></a>
+        </div>
+      </div>
+
+      <form class="cf fi" id="cForm" novalidate>
+        <div class="fr">
+          <div class="fg"><label>First Name</label><input type="text" id="fn" placeholder="John" required/><span class="err-msg" id="fn-err">Please enter your first name.</span></div>
+          <div class="fg"><label>Last Name</label><input type="text" id="ln" placeholder="Doe" required/><span class="err-msg" id="ln-err">Please enter your last name.</span></div>
+        </div>
+        <div class="fg"><label>Email Address</label><input type="email" id="em" placeholder="john@example.com" required/><span class="err-msg" id="em-err">Please enter a valid email.</span></div>
+        <div class="fg">
+          <label>Subject</label>
+          <select id="subj">
+            <option value="">Select a topic...</option>
+            <option>Project Collaboration</option>
+            <option>Internship Opportunity</option>
+            <option>Feedback on My Work</option>
+            <option>General Inquiry</option>
+            <option>Just Saying Hi 👋</option>
+          </select>
+        </div>
+        <div class="fg"><label>Message</label><textarea id="msg" placeholder="Tell me about your idea or inquiry..." required></textarea><span class="err-msg" id="msg-err">Please enter your message.</span></div>
+        <div class="fs" id="fs"></div>
+        <button type="submit" class="btn btn-primary" id="sbtn" style="width:fit-content"><i class="fas fa-paper-plane"></i> Send Message</button>
+      </form>
+    </div>
+  </div>
+  <footer><p>© 2026 <b>Okoro Anthony Martins</b>. All rights reserved.</p></footer>
+</div>
+
+<!-- JQUERY + JS -->
+<script>
+$(function(){
+
+  /* 1. PAGE NAVIGATION */
+  function go(page){
+    $('.page').removeClass('active').hide();
+    $('[data-page]').removeClass('active');
+    $('#page-'+page).addClass('active').hide().fadeIn(350);
+    $('[data-page="'+page+'"]').addClass('active');
+    $('html,body').animate({scrollTop:0},300);
+    closeMenu();
+    setTimeout(function(){ doFI(); doBars(); },80);
+  }
+  $('[data-page]').on('click',function(e){ e.preventDefault(); go($(this).data('page')); });
+  $('#btnWork').on('click',function(){ go('portfolio'); });
+  $('#btnContact').on('click',function(){ go('contact'); });
+  $('#btnProjects').on('click',function(){ go('portfolio'); });
+  $('#btnHire').on('click',function(){ go('contact'); });
+
+  /* 2. NAVBAR SCROLL */
+  $(window).on('scroll',function(){
+    $('#nav').toggleClass('scrolled',$(this).scrollTop()>20);
+    $(this).scrollTop()>300 ? $('#backTop').css('display','flex') : $('#backTop').hide();
+  });
+
+  /* 3. HAMBURGER */
+  $('#ham').on('click',function(){ $(this).toggleClass('open'); $('#mob').slideToggle(250); });
+  function closeMenu(){ $('#ham').removeClass('open'); $('#mob').slideUp(200); }
+
+  /* 4. BACK TO TOP */
+  $('#backTop').on('click',function(){ $('html,body').animate({scrollTop:0},400); });
+
+  /* 5. FADE-IN */
+  function doFI(){
+    var io=new IntersectionObserver(function(entries){
+      $.each(entries,function(_,e){ if(e.isIntersecting){$(e.target).addClass('v');io.unobserve(e.target);} });
+    },{threshold:0.1});
+    $('.page.active .fi:not(.v)').each(function(){ io.observe(this); });
+  }
+  setTimeout(doFI,100);
+
+  /* 6. SKILL BARS */
+  function doBars(){
+    $('.page.active .bf').each(function(){
+      var p=$(this).data('p');
+      $(this).delay(200).animate({width:p+'%'},1300);
+    });
+  }
+
+  /* 7. PROJECT FILTER */
+  $('.fb').on('click',function(){
+    $('.fb').removeClass('active'); $(this).addClass('active');
+    var f=$(this).data('f');
+    $('.pc').each(function(){
+      f==='all'||$(this).data('c')===f ? $(this).fadeIn(300) : $(this).fadeOut(200);
+    });
+  });
+
+  /* 8. TOOLTIP */
+  $('[data-tip]').on('mouseenter',function(e){
+    $('#tooltip').text($(this).data('tip')).css({top:e.pageY-36,left:e.pageX+12}).fadeIn(180);
+  }).on('mousemove',function(e){
+    $('#tooltip').css({top:e.pageY-36,left:e.pageX+12});
+  }).on('mouseleave',function(){ $('#tooltip').fadeOut(150); });
+
+  /* 9. SKILL CARD HOVER */
+  $('.sc').on('mouseenter',function(){ $(this).find('.sc-icon').animate({marginBottom:'1.2rem'},150); })
+          .on('mouseleave',function(){ $(this).find('.sc-icon').animate({marginBottom:'.8rem'},150); });
+
+  /* 10. FORM VALIDATION */
+  function showErr(f,e){ $('#'+f).addClass('field-error'); $('#'+e).slideDown(180); return false; }
+  function clearErr(f,e){ $('#'+f).removeClass('field-error'); $('#'+e).slideUp(150); }
+  $('#fn').on('input',function(){ clearErr('fn','fn-err'); });
+  $('#ln').on('input',function(){ clearErr('ln','ln-err'); });
+  $('#em').on('input',function(){ clearErr('em','em-err'); });
+  $('#msg').on('input',function(){ clearErr('msg','msg-err'); });
+
+  $('#cForm').on('submit',function(e){
+    e.preventDefault();
+    var ok=true;
+    var fn=$.trim($('#fn').val()), ln=$.trim($('#ln').val()),
+        em=$.trim($('#em').val()), msg=$.trim($('#msg').val());
+    var reg=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    $('#fs').removeClass('ok err fs');
+    if(!fn){ showErr('fn','fn-err'); ok=false; }
+    if(!ln){ showErr('ln','ln-err'); ok=false; }
+    if(!em||!reg.test(em)){ showErr('em','em-err'); ok=false; }
+    if(!msg){ showErr('msg','msg-err'); ok=false; }
+    if(!ok){ $('#fs').addClass('err fs').text('⚠️ Please fix the errors above.').hide().slideDown(250); return; }
+    var $btn=$('#sbtn');
+    $btn.html('<i class="fas fa-spinner fa-spin"></i> Sending...').prop('disabled',true);
+    setTimeout(function(){
+      $('#fs').addClass('ok fs').text('✅ Message sent! I\'ll get back to you shortly, '+fn+'.').hide().slideDown(300);
+      $('#cForm')[0].reset();
+      $btn.html('<i class="fas fa-paper-plane"></i> Send Message').prop('disabled',false);
+    },1500);
+  });
+
+});
+</script>
+</body>
+</html>
